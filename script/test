@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Author: Jose Miguel Colella
+
+pip3 install -r requirements.txt
+
+
+python3 ./tests/unit/tests.py -v
