@@ -1,55 +1,26 @@
-python-package-boilerplate
-==========================
+PostCode UK
+===========
 
-[![Build Status](https://travis-ci.org/mtchavez/python-package-boilerplate.png?branch=master)](https://travis-ci.org/mtchavez/python-package-boilerplate)
-[![Requires.io](https://requires.io/github/mtchavez/python-package-boilerplate/requirements.svg?branch=master)](https://requires.io/github/mtchavez/python-package-boilerplate/requirements?branch=master)
+A small library for validating and formatting UK postcodes
 
-Boilerplate for a Python Package
 
-## Package
+[![Build Status](https://travis-ci.org/josecolella/postcode_uk.svg?branch=master)](https://travis-ci.org/josecolella/postcode_uk)
 
-Basic structure of package is
+## Usage
 
-```
-├── README.md
-├── packagename
-│   ├── __init__.py
-│   ├── packagename.py
-│   └── version.py
-├── pytest.ini
-├── requirements.txt
-├── setup.py
-└── tests
-    ├── __init__.py
-    ├── helpers
-    │   ├── __init__.py
-    │   └── my_helper.py
-    ├── tests_helper.py
-    └── unit
-        ├── __init__.py
-        ├── test_example.py
-        └── test_version.py
-```
+```python
+import postcodeuk
 
-## Requirements
+# Two methods are exposed to the user : validate and format
 
-Package requirements are handled using pip. To install them do
+# Returns true if postcode is a valid UK postcode
+is_valid = postcodeuk.validate('ZE1 0QX')
 
-```
-pip install -r requirements.txt
-```
-
-## Tests
-
-Testing is set up using [pytest](http://pytest.org) and coverage is handled
-with the pytest-cov plugin.
-
-Run your tests with ```py.test``` in the root directory.
-
-Coverage is ran by default and is set in the ```pytest.ini``` file.
-To see an html output of coverage open ```htmlcov/index.html``` after running the tests.
-
-## Travis CI
-
-There is a ```.travis.yml``` file that is set up to run your tests for python 2.7
-and python 3.2, should you choose to use it.
+# Returns a dictionary with the UK postcode sections as keys and
+# the values as the appropriate part
+formatted_postcode = postcodeuk.format('ZE1 0QX')
+# Returns
+# {
+#   'outwardcode': 'ZE1', 'postarea': 'ZE', 'postdistrict': '1',
+#   'inwardcode': ' 0QX', 'postsector': ' 0', 'postunit': 'QX'
+#  }

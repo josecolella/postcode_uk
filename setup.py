@@ -1,15 +1,14 @@
 import setuptools
-from postcode_uk.version import Version
+from postcodeuk.version import Version
 
 
-setuptools.setup(name='postcode-uk',
-                 version=Version('1.0.0').number,
+setuptools.setup(name='postcodeuk2',
+                 version=Version('0.0.1').number,
                  description='A small library to validate and format UK postcodes',
                  long_description=open('README.md').read().strip(),
                  author='Package Author',
                  author_email='josecolella@yahoo.com',
-                 url='https://github.com/josecolella/Scurry-Challenge',
-                 py_modules=['postcodeuk'],
+                 url='https://github.com/josecolella/postcode_uk',
                  install_requires=[],
                  license='MIT',
                  zip_safe=False,
