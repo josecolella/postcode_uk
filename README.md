@@ -9,9 +9,16 @@ A small library for validating and formatting UK postcodes
 The library uses no-external dependencies, and only uses the built-in `re` module.
 The regex to format and validate the UK post code is the following:
 
-`^(?P<outwardcode>(?P<postarea>[a-zA-Z]{1,2})(?P<postdistrict>[0-9]{1,2}[a-zA-Z]?))(?P<inwardcode>(?P<postsector>\s[0-9])(?P<postunit>[a-zA-Z]{2}))$`
+`^(?P<outwardcode>(?P<postarea>[A-PR-UWYZ]{1,2})(?P<postdistrict>[A-HK-Y0-9]{1,2}[A-Z]?))(?P<inwardcode>(?P<postsector>\s[0-9])(?P<postunit>[A-BD-HJLNP-UW-Z]{2}))$`
 
-The regex matches the description of valid UK postcodes that is found ![Here](https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#Formatting)
+This is the initial validation regex and afterwards several restriction validations are carried out, such as:
+- Areas with only single-digit districts
+- Areas with only double-digit districts
+- Areas with a district '0'
+- Letter validation for third position when outward code followes pattern A9A
+- Letter validation for fourth position when outward code AA9A
+
+The regex matches the description of valid UK postcodes that is found [Here](https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#Formatting)
 
 
 ## Usage
