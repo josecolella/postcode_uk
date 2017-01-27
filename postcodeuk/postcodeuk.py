@@ -23,8 +23,21 @@ The inward code is made up of the postcode sector and postcode unit
 import re
 
 UK_POSTCODE_COMPILED_REGEX = re.compile(
-    r'^(?P<outwardcode>(?P<postarea>[a-zA-Z]{1,2})(?P<postdistrict>[0-9]{1,2}[a-zA-Z]?))(?P<inwardcode>(?P<postsector>\s[0-9])(?P<postunit>[a-zA-Z]{2}))$'
+    r'^(?P<outwardcode>(?P<postarea>[A-PR-UWYZ]{1,2})(?P<postdistrict>[A-HK-Y0-9]{1,2}[A-Z]?))(?P<inwardcode>(?P<postsector>\s[0-9])(?P<postunit>[A-BD-HJLNP-UW-Z]{2}))$',
+    re.IGNORECASE
 )
+
+UK_SINGLE_DIGIT_DISTRICT_AREA_VALIDATION = frozenset(('BR', 'FY', 'HA', 'HD', 'HG', 'HR', 'HS',
+                                                      'HX', 'JE', 'LD', 'SM', 'SR', 'WC', 'WN', 'ZE'))
+UK_DOUBLE_DIGIT_DISTRICT_AREA_VALIDATION = frozenset(("AB", "LL", "SO"))
+UK_AREA_WITH_DISTRICT_ZERO_VALIDATION = frozenset(
+    ("BL", "BS", "CM", "CR", "FY", "HA", "PR", "SL", "SS"))
+
+UK_THIRD_LETTER_VALIDATION = 'ABCDEFGHJKPSTUW'
+UK_FOURTH_LETTER_VALIDATION = 'ABEHMNPRVWXY'
+UK_CENTRAL_LONDON_SPECIAL_AREAS = frozenset(
+    ('EC1', 'EC2', 'EC3', 'EC4', 'SW1', 'W1', 'WC1', 'WC3',
+     'E1W', 'N1C', 'N1P', 'NW1W', 'SE1P'))
 
 
 def validate(postcode):
@@ -34,9 +47,30 @@ def validate(postcode):
     Returns:
         A boolean True if the `postcode` is a valid postcode else returns False
     """
-    is_valid = True if re.match(
-        UK_POSTCODE_COMPILED_REGEX, postcode
-    ) else False
+
+    is_valid = True
+    initial_match = re.match(UK_POSTCODE_COMPILED_REGEX, postcode)
+    if initial_match:
+        # Passes initial validation
+        breakdown_match = initial_match.groupdict()
+        postdistrict = breakdown_match['postdistrict']
+        postarea = breakdown_match['postarea']
+        # Test further restrictions
+        validation_dict = {
+            'only_double_digit': [postarea in UK_DOUBLE_DIGIT_DISTRICT_AREA_VALIDATION, True if re.match('^[0-9]{2}$', postdistrict) else False],
+            'only_single_digit': [postarea in UK_SINGLE_DIGIT_DISTRICT_AREA_VALIDATION, True if re.match('^[0-9]$', postdistrict) else False],
+            'zero_district': [True if re.match(r'1?0', postdistrict) else False, postarea in UK_AREA_WITH_DISTRICT_ZERO_VALIDATION],
+            'third_position': [True if re.match(r'^[A-PR-UWYZ][0-9][a-z]', breakdown_match['outwardcode'], re.IGNORECASE) else False, postdistrict[-1] in UK_THIRD_LETTER_VALIDATION],
+            'fourth_position': [True if re.match(r'[A-PR-UWYZ]{2}[0-9][A-Z]', breakdown_match['outwardcode'], re.IGNORECASE) else False, postdistrict[-1] in UK_FOURTH_LETTER_VALIDATION]
+        }
+        validation_set = set((False if validation[1] is False and validation[0] else True for validation in validation_dict.values()))
+
+        if False in validation_set:
+            is_valid = False
+        else:
+            is_valid = True
+    else:
+        is_valid = False
     return is_valid
 
 
@@ -57,8 +91,8 @@ def format(postcode):
             }
     """
     formatted_postcode = {}
-    match = re.match(UK_POSTCODE_COMPILED_REGEX, postcode)
-    if match:
+    if validate(postcode):
+        match = re.match(UK_POSTCODE_COMPILED_REGEX, postcode)
         formatted_postcode = match.groupdict()
 
     return formatted_postcode

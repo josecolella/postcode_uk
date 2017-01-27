@@ -43,8 +43,8 @@ class TestPostCode(unittest.TestCase):
         formatted_postcode = postcodeuk.format('ST7 4QT')
         self.assertEqual(dict, type(formatted_postcode))
 
-    def test_validation_BN150PR_should_return_true(self):
-        candidate = 'BN15 0PR'
+    def test_validation_RG412RD_should_return_true(self):
+        candidate = 'RG41 2RD'
         self.assertTrue(postcodeuk.validate(candidate))
 
     def test_formatting_BN150PR_should_return_all_postcode_keys(self):
@@ -73,9 +73,29 @@ class TestPostCode(unittest.TestCase):
         for key in formatted_postcode.keys():
             self.assertIn(key, self.valid_postcode_parameters)
 
+    def test_validation_BL82RS_should_return_true(self):
+        candidate = 'BL8 2RS'
+        self.assertTrue(postcodeuk.validate(candidate))
+
+    def test_validation_AB423GU_should_return_true(self):
+        candidate = 'AB42 3GU'
+        self.assertTrue(postcodeuk.validate(candidate))
+
     def test_validation_UB96TH_should_return_true(self):
         candidate = 'UB9 6TH'
         self.assertTrue(postcodeuk.validate(candidate))
+
+    def test_validation_EC1A1BB_should_return_true(self):
+        candidate = 'EC1A 1BB'
+        self.assertTrue(postcodeuk.validate(candidate))
+
+    def test_validation_DN551PT_should_return_true(self):
+        candidate = 'DN55 1PT'
+        self.assertTrue(postcodeuk.validate(candidate))
+
+    def test_validation_EC1Z1BB_should_return_false(self):
+        candidate = 'EC1Z 1BB'
+        self.assertFalse(postcodeuk.validate(candidate))
 
     def test_formatting_UB96TH_should_return_all_postcode_keys(self):
         candidate = 'UB9 6TH'
@@ -103,15 +123,23 @@ class TestPostCode(unittest.TestCase):
         for key in formatted_postcode.keys():
             self.assertIn(key, self.valid_postcode_parameters)
 
-    def test_validation_BH148HB_should_return_true(self):
-        candidate = 'BH14 8HB'
+    def test_validation_BH52AF_should_return_true(self):
+        candidate = 'BH5 2AF'
         self.assertTrue(postcodeuk.validate(candidate))
 
-    def test_formatting_LE11_should_return_all_postcode_keys(self):
+    def test_formatting_LE113PW_should_return_all_postcode_keys(self):
         candidate = 'LE11 3PW'
         formatted_postcode = postcodeuk.format(candidate)
         for key in formatted_postcode.keys():
             self.assertIn(key, self.valid_postcode_parameters)
+
+    def test_validation_QA19AA_should_return_false(self):
+        candidate = 'QA1 9AA'
+        self.assertFalse(postcodeuk.validate(candidate))
+
+    def test_validation_BL01BB_should_return_true(self):
+        candidate = 'BL0 1BB'
+        self.assertTrue(postcodeuk.validate(candidate))
 
 
 if __name__ == '__main__':
