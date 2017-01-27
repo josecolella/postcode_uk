@@ -58,7 +58,7 @@ def validate(postcode):
         # Test further restrictions
         validation_dict = {
             'only_double_digit': [postarea in UK_DOUBLE_DIGIT_DISTRICT_AREA_VALIDATION, True if re.match('^[0-9]{2}$', postdistrict) else False],
-            'only_single_digit': [postarea in UK_SINGLE_DIGIT_DISTRICT_AREA_VALIDATION, True if re.match('^[0-9]$', postdistrict) else False],
+            'only_single_digit': [postarea in UK_SINGLE_DIGIT_DISTRICT_AREA_VALIDATION, True if re.match('^[0-9][a-z]?$', postdistrict, re.IGNORECASE) else False],
             'zero_district': [True if re.match(r'1?0', postdistrict) else False, postarea in UK_AREA_WITH_DISTRICT_ZERO_VALIDATION],
             'third_position': [True if re.match(r'^[A-PR-UWYZ][0-9][a-z]', breakdown_match['outwardcode'], re.IGNORECASE) else False, postdistrict[-1] in UK_THIRD_LETTER_VALIDATION],
             'fourth_position': [True if re.match(r'[A-PR-UWYZ]{2}[0-9][A-Z]', breakdown_match['outwardcode'], re.IGNORECASE) else False, postdistrict[-1] in UK_FOURTH_LETTER_VALIDATION]

@@ -137,6 +137,14 @@ class TestPostCode(unittest.TestCase):
         candidate = 'QA1 9AA'
         self.assertFalse(postcodeuk.validate(candidate))
 
+    def test_validation_AB5O9AA_should_return_false(self):
+        candidate = 'AB5O 9AA'
+        self.assertFalse(postcodeuk.validate(candidate))
+
+    def test_validation_WC1A9AA_should_return_true(self):
+        candidate = 'WC1A 9AA'
+        self.assertTrue(postcodeuk.validate(candidate))
+
     def test_validation_BL01BB_should_return_true(self):
         candidate = 'BL0 1BB'
         self.assertTrue(postcodeuk.validate(candidate))
